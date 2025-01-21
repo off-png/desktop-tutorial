@@ -1,0 +1,6 @@
+body {
+    background-image: url('of1.jpg'); /* აქ ჩაწერე შენი სურათის სახელი */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
