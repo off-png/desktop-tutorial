@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            background-image: url('of1.jpg'); /* სურათი სწორად უნდა იყოს ატვირთული */
+            background-image: url('of1.jpg'); /* მთავარი ფონის სურათი */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -23,6 +23,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
+            overflow-y: auto; /* Android-ისთვის უკეთესი სქროლი */
         }
 
         .sidebar h2 {
@@ -47,6 +48,7 @@
 
         .content {
             margin-left: 270px;
+            padding: 10px;
             text-align: center;
             color: white;
             font-size: 30px;
@@ -54,7 +56,7 @@
 
         .gallery {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
             padding: 20px;
             margin-top: 20px;
@@ -65,6 +67,24 @@
             height: auto;
             border-radius: 10px;
             border: 5px solid black;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* მაუსის გადატარებისას Android-ისთვის */
+        .gallery img:active {
+            opacity: 0.5;
+        }
+
+        /* მობილური მოწყობილობებისთვის */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .content {
+                margin-left: 0;
+            }
         }
     </style>
 </head>
@@ -81,32 +101,46 @@
     <div class="content">
         <h1>ფოტოების გალერეა</h1>
         <p>გალერეა შეიცვლის სურათებს შესაბამისი კატეგორიის მიხედვით.</p>
-
         <div id="gallery" class="gallery"></div>
     </div>
 
     <script>
-        function showGallery(category) {
-            const galleries = {
-                cultural: [
-                    'ofg11.jpg', 'ofg12.jpg', 'ofg13.jpg', 'oft1.jpg', 'oft2.jpg', 'oft3.jpg', 'oft4.jpg', 'oft5.jpg', 'oft6.jpg', 'oft7.jpg', 'oft8.jpg',
-                ],
-                mountains: [
-                    'of9.jpg', 'of8.jpg', 'ofg11.jpg', 'ofg12.jpg', 'ofg13.jpg', 'of.jpg',],
-                rivers: [
-                    'of10.jpg', 'of8.jpg',
-                ]
-            };
+        const galleries = {
+            cultural: ['ofg11.jpg', 'ofg12.jpg', 'ofg13.jpg', 'oft1.jpg', 'oft2.jpg', 'oft3.jpg', 'oft4.jpg', 'oft5.jpg', 'oft6.jpg', 'oft7.jpg', 'oft8.jpg'],
+            mountains: ['of9.jpg', 'of8.jpg', 'ofg11.jpg', 'ofg12.jpg', 'ofg13.jpg', 'of.jpg'],
+            rivers: ['of10.jpg', 'of8.jpg']
+        };
 
+        function showGallery(category) {
             const galleryContainer = document.getElementById('gallery');
             galleryContainer.innerHTML = '';
 
             const images = galleries[category];
-            images.forEach(image => {
+            images.forEach((image, index) => {
                 const imgElement = document.createElement('img');
                 imgElement.src = image;
+                imgElement.dataset.index = index;
+                imgElement.dataset.category = category;
+
+                // თუ სურათი არ ჩაიტვირთება, შეცვლის სხვა სურათით
+                imgElement.onerror = function() {
+                    this.src = 'default.jpg'; // ეს სურათი უნდა იყოს ატვირთული
+                };
+
+                imgElement.addEventListener('touchstart', changeImage); // Android-ისთვის
                 galleryContainer.appendChild(imgElement);
             });
+        }
+
+        function changeImage(event) {
+            const imgElement = event.target;
+            const category = imgElement.dataset.category;
+            const index = parseInt(imgElement.dataset.index, 10);
+            const images = galleries[category];
+
+            let nextIndex = (index + 1) % images.length;
+            imgElement.src = images[nextIndex];
+            imgElement.dataset.index = nextIndex;
         }
     </script>
 </body>
