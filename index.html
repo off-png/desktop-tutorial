@@ -96,7 +96,7 @@
             }
         }
 
-        /* შეტყობინებების პანელი ზედა მარჯვენა კუთხეში */
+        /* შეტყობინებების პანელი - მუდამ ჩართული ზედა მარჯვენა კუთხეში */
         .notification-panel {
             position: fixed;
             top: 10px;
@@ -105,7 +105,8 @@
             color: white;
             padding: 15px;
             border-radius: 5px;
-            display: none;
+            min-width: 200px;
+            text-align: center;
         }
     </style>
 </head>
@@ -126,16 +127,12 @@
     </div>
 
     <!-- შეტყობინებების პანელი -->
-    <div id="notification" class="notification-panel"></div>
+    <div id="notification" class="notification-panel">მოხმარებლის შეტყობინება</div>
 
     <script>
         function showNotification(message) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
         }
 
         const galleries = {
@@ -160,6 +157,7 @@
                 imgElement.addEventListener('click', changeImage);
                 galleryContainer.appendChild(imgElement);
             });
+            showNotification(`გალერეა შეიცვალა: ${category}`);
         }
 
         function changeImage(event) {
