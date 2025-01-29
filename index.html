@@ -118,6 +118,8 @@
             rivers: ['of10.jpg', 'of8.jpg']
         };
 
+        let touchMoved = false; // ნიშნული იმისთვის, რომ ვნახოთ, გადაადგილდა თუ არა თითი
+
         function showGallery(category) {
             const galleryContainer = document.getElementById('gallery');
             galleryContainer.innerHTML = '';
@@ -129,12 +131,27 @@
                 imgElement.dataset.index = index;
                 imgElement.dataset.category = category;
 
-                // თუ სურათი არ ჩაიტვირთება, შეცვლის სხვა სურათით
+                // შეცდომის შემთხვევაში fallback სურათი
                 imgElement.onerror = function() {
                     this.src = 'default.jpg';
                 };
 
-                imgElement.addEventListener('touchstart', changeImage);
+                // სკროლის თავიდან ასაცილებლად
+                imgElement.addEventListener('touchstart', function () {
+                    touchMoved = false;
+                });
+
+                imgElement.addEventListener('touchmove', function () {
+                    touchMoved = true;
+                });
+
+                imgElement.addEventListener('touchend', function (event) {
+                    if (!touchMoved) {
+                        changeImage(event);
+                    }
+                });
+
+                imgElement.addEventListener('click', changeImage); // PC-სთვის
                 galleryContainer.appendChild(imgElement);
             });
         }
