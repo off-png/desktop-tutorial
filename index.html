@@ -10,7 +10,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            background-image: url('of1.jpg'); /* მთავარი ფონის სურათი */
+            background-image: url('of1.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -58,7 +58,7 @@
 
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* დიდი ზომის ფოტოები */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
             padding: 20px;
             margin-top: 20px;
@@ -66,8 +66,8 @@
 
         .gallery img {
             width: 100%;
-            height: 300px; /* სურათები ერთნაირი სიმაღლის იქნება */
-            object-fit: cover; /* ფოტოების პროპორციების შენარჩუნება */
+            height: 300px;
+            object-fit: cover;
             border-radius: 10px;
             border: 5px solid black;
             transition: transform 0.3s ease-in-out;
@@ -89,11 +89,62 @@
                 margin-left: 0;
             }
             .gallery {
-                grid-template-columns: repeat(auto-fit, minmax(100%, 1fr)); /* ერთი დიდი სურათი ერთ რიგში */
+                grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
             }
             .gallery img {
-                height: auto; /* სიმაღლე ავტომატურად */
+                height: auto;
             }
+        }
+
+        /* საკონტაქტო ფორმის სტილი */
+        .contact-section {
+            background-color: #f7f7f7;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        .contact-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group textarea {
+            height: 150px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -113,6 +164,26 @@
         <div id="gallery" class="gallery"></div>
     </div>
 
+    <!-- საკონტაქტო ფორმის სექცია -->
+    <div class="contact-section">
+        <h2>დაგვიკავშირდით</h2>
+        <form id="contact-form" action="submit_form.php" method="POST">
+            <div class="form-group">
+                <label for="name">სახელი:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">მეილი:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">წერილი:</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit">გაგზავნა</button>
+        </form>
+    </div>
+
     <script>
         const galleries = {
             cultural: ['ofg11.jpg', 'ofg12.jpg', 'ofg13.jpg', 'oft1.jpg', 'oft2.jpg', 'oft3.jpg', 'oft4.jpg', 'oft5.jpg', 'oft6.jpg', 'oft7.jpg', 'oft8.jpg'],
@@ -120,7 +191,7 @@
             rivers: ['of10.jpg', 'of8.jpg']
         };
 
-        let touchMoved = false; // ნიშნული იმისთვის, რომ ვნახოთ, გადაადგილდა თუ არა თითი
+        let touchMoved = false;
 
         function showGallery(category) {
             const galleryContainer = document.getElementById('gallery');
@@ -133,12 +204,10 @@
                 imgElement.dataset.index = index;
                 imgElement.dataset.category = category;
 
-                // შეცდომის შემთხვევაში fallback სურათი
                 imgElement.onerror = function() {
                     this.src = 'default.jpg';
                 };
 
-                // სკროლის თავიდან ასაცილებლად
                 imgElement.addEventListener('touchstart', function () {
                     touchMoved = false;
                 });
@@ -168,6 +237,13 @@
             imgElement.src = images[nextIndex];
             imgElement.dataset.index = nextIndex;
         }
+
+        // ფორმის გაგზავნის დროს შეტყობინება
+        document.getElementById("contact-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("თქვენი შეტყობინება წარმატებით გაიგზავნა!");
+            // აქ შეგიძლია დაამატო კოდი რომ გაგზავნა გადავიდეს სხვა სერვერზე
+        });
     </script>
 </body>
 </html>
