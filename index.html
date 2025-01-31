@@ -122,6 +122,8 @@
     </div>
 
     <div class="content">
+        <a href="index.html" class="back-button">⬅ მთავარი გვერდი</a>
+
         <h1>ფოტოების გალერეა</h1>
         <p>გალერეა შეიცვლის სურათებს შესაბამისი კატეგორიის მიხედვით.</p>
         <div id="gallery" class="gallery"></div>
@@ -170,6 +172,12 @@
             let nextIndex = (index + 1) % images.length;
             imgElement.src = images[nextIndex];
             imgElement.dataset.index = nextIndex;
+            <!-- ფოტოს გადიდების მოდალი -->
+<div id="image-modal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modal-img">
+</div>
+
         }
     </script>
 </body>
