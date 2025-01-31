@@ -1,23 +1,6 @@
-/* დამალვა მობილურზე */
-@media (max-width: 768px) {
-  .gallery {
-    display: block;
-  }
-  .gallery img {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-}
-
-/* კომპიუტერზე */
-@media (min-width: 769px) {
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* სამი სვეტი */
-    gap: 15px;
-  }
-  .gallery img {
-    width: 100%;
-    height: auto;
-  }
+body {
+    background-image: url('of1.jpg'); /* აქ ჩაწერე შენი სურათის სახელი */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
