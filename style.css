@@ -1,6 +1,36 @@
-body {
-    background-image: url('of1.jpg'); /* აქ ჩაწერე შენი სურათის სახელი */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.gallery img {
+    width: 100%;
+    height: auto;
+    max-height: 400px; /* ზომის კონტროლი */
+    object-fit: cover;
+    border-radius: 10px;
+    border: 4px solid black;
+    transition: transform 0.3s ease-in-out;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+}
+
+/* პლანშეტებისთვის (2 სვეტი) */
+@media (max-width: 1023px) {
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* მობილურებისთვის (1 სვეტი) */
+@media (max-width: 768px) {
+    .gallery {
+        grid-template-columns: 1fr;
+    }
 }
