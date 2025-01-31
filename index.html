@@ -16,7 +16,6 @@
             background-position: center;
             background-attachment: fixed;
         }
-
         .sidebar {
             position: fixed;
             left: 0;
@@ -28,27 +27,15 @@
             padding: 20px;
             overflow-y: auto;
         }
-
-        .sidebar h2 {
-            text-align: center;
-        }
-
-        .category-list {
-            list-style: none;
-            padding: 0;
-        }
-
+        .sidebar h2 { text-align: center; }
+        .category-list { list-style: none; padding: 0; }
         .category-list li {
             margin: 15px 0;
             cursor: pointer;
             font-size: 18px;
             text-align: center;
         }
-
-        .category-list li:hover {
-            color: #ddd;
-        }
-
+        .category-list li:hover { color: #ddd; }
         .content {
             margin-left: 270px;
             padding: 10px;
@@ -56,7 +43,6 @@
             color: white;
             font-size: 30px;
         }
-
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -64,7 +50,6 @@
             padding: 20px;
             margin-top: 20px;
         }
-
         .gallery img {
             width: 100%;
             height: 300px;
@@ -73,41 +58,38 @@
             border: 5px solid black;
             transition: transform 0.3s ease-in-out;
         }
-
-        .gallery img:hover {
-            transform: scale(1.05);
-        }
-
-        /* მობილური მოწყობილობებისთვის */
+        .gallery img:hover { transform: scale(1.05); }
         @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                text-align: center;
-            }
-            .content {
-                margin-left: 0;
-            }
-            .gallery {
-                grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-            }
-            .gallery img {
-                height: auto;
-            }
+            .sidebar { width: 100%; height: auto; position: relative; text-align: center; }
+            .content { margin-left: 0; }
+            .gallery { grid-template-columns: repeat(auto-fit, minmax(100%, 1fr)); }
+            .gallery img { height: auto; }
         }
-
-        /* შეტყობინებების პანელი - მუდამ ჩართული ზედა მარჯვენა კუთხეში */
-        .notification-panel {
+        .modal {
+            display: none;
             position: fixed;
-            top: 10px;
-            right: 10px;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
             color: white;
-            padding: 15px;
-            border-radius: 5px;
-            min-width: 200px;
-            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -120,65 +102,46 @@
             <li onclick="showGallery('rivers')">მდინარე ტბა</li>
         </ul>
     </div>
-
     <div class="content">
         <a href="index.html" class="back-button">⬅ მთავარი გვერდი</a>
-
         <h1>ფოტოების გალერეა</h1>
         <p>გალერეა შეიცვლის სურათებს შესაბამისი კატეგორიის მიხედვით.</p>
         <div id="gallery" class="gallery"></div>
     </div>
-
-    <!-- შეტყობინებების პანელი -->
-    <div id="notification" class="notification-panel">მოხმარებლის შეტყობინება</div>
-
+    <div id="image-modal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modal-img">
+    </div>
     <script>
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-        }
-
         const galleries = {
             cultural: ['oft1.jpg','oft2.jpg','oft3.jpg','oft4.jpg','t.jpg','t2.jpg'],
             mountains: ['of9.jpg','of8.jpg','ofg11.jpg','ofg12.jpg','ofg13.jpg','of.jpg','ofg26.jpg','ofg27.jpg','ofg28.jpg'],
             rivers: ['of10.jpg','c.jpg','m.jpg','m2.jpg','m3.jpg','m4.jpg','m5.jpg','m6.jpg','m7.jpg','m8.jpg','r.jpg','r(2).jpg'],
         };
-
         function showGallery(category) {
             const galleryContainer = document.getElementById('gallery');
             galleryContainer.innerHTML = '';
-
             const images = galleries[category];
-            images.forEach((image, index) => {
+            images.forEach((image) => {
                 const imgElement = document.createElement('img');
                 imgElement.src = image;
-                imgElement.dataset.index = index;
-                imgElement.dataset.category = category;
-                imgElement.onerror = function() {
-                    this.src = 'default.jpg';
-                };
-                imgElement.addEventListener('click', changeImage);
+                imgElement.onerror = function() { this.src = 'default.jpg'; };
+                imgElement.addEventListener('click', openModal);
                 galleryContainer.appendChild(imgElement);
             });
-            showNotification(`გალერეა შეიცვალა: ${category}`);
         }
-
-        function changeImage(event) {
-            const imgElement = event.target;
-            const category = imgElement.dataset.category;
-            const index = parseInt(imgElement.dataset.index, 10);
-            const images = galleries[category];
-
-            let nextIndex = (index + 1) % images.length;
-            imgElement.src = images[nextIndex];
-            imgElement.dataset.index = nextIndex;
-            <!-- ფოტოს გადიდების მოდალი -->
-<div id="image-modal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="modal-img">
-</div>
-
+        function openModal(event) {
+            const modal = document.getElementById("image-modal");
+            const modalImg = document.getElementById("modal-img");
+            modal.style.display = "flex";
+            modalImg.src = event.target.src;
         }
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("image-modal");
+            const closeModal = document.querySelector(".close");
+            closeModal.addEventListener("click", function () { modal.style.display = "none"; });
+            modal.addEventListener("click", function (e) { if (e.target === modal) { modal.style.display = "none"; } });
+        });
     </script>
 </body>
 </html>
