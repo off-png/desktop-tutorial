@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ka">
 <head>
     <meta charset="UTF-8">
@@ -77,6 +76,7 @@
             transform: scale(1.05);
         }
 
+        /* მობილური მოწყობილობებისთვის */
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -95,6 +95,7 @@
             }
         }
 
+        /* შეტყობინებების პანელი - მუდამ ჩართული ზედა მარჯვენა კუთხეში */
         .notification-panel {
             position: fixed;
             top: 10px;
@@ -107,6 +108,7 @@
             text-align: center;
         }
 
+        /* დაბრუნების ღილაკი */
         .back-button {
             display: none;
             margin-bottom: 20px;
@@ -141,6 +143,7 @@
         <div id="gallery" class="gallery"></div>
     </div>
 
+    <!-- შეტყობინებების პანელი -->
     <div id="notification" class="notification-panel">მოხმარებლის შეტყობინება</div>
 
     <script>
@@ -158,7 +161,7 @@
         function showGallery(category) {
             const galleryContainer = document.getElementById('gallery');
             galleryContainer.innerHTML = '';
-            
+
             const images = galleries[category];
             images.forEach((image, index) => {
                 const imgElement = document.createElement('img');
@@ -179,6 +182,17 @@
             document.getElementById('gallery').innerHTML = '';
             showNotification("დაბრუნდით მთავარ გვერდზე");
             document.getElementById('backButton').style.display = 'none';
+        }
+
+        function changeImage(event) {
+            const imgElement = event.target;
+            const category = imgElement.dataset.category;
+            const index = parseInt(imgElement.dataset.index, 10);
+            const images = galleries[category];
+
+            let nextIndex = (index + 1) % images.length;
+            imgElement.src = images[nextIndex];
+            imgElement.dataset.index = nextIndex;
         }
     </script>
 </body>
